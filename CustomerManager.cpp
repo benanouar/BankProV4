@@ -98,6 +98,18 @@ void CustomerManager::showCustomers()
 
     Utils::line();
 }
+string CustomerManager::getCustomerName(int id)
+{
+    for (const Customer &customer : customers)
+    {
+        if (customer.getId() == id)
+        {
+            return customer.getFullName();
+        }
+    }
+
+    return "Unknown";
+}
 void CustomerManager::editCustomer()
 {
     UI::drawHeader("EDIT CUSTOMER");
@@ -241,7 +253,26 @@ void CustomerManager::load()
 
     file.close();
 }
+bool CustomerManager::exists(int id)
+{
+    for (Customer &customer : customers)
+    {
+        if (customer.getId() == id)
+            return true;
+    }
 
+    return false;
+}
+Customer* CustomerManager::findById(int id)
+{
+    for (Customer &customer : customers)
+    {
+        if (customer.getId() == id)
+            return &customer;
+    }
+
+    return nullptr;
+}
 void CustomerManager::save()
 {
     ofstream file(CUSTOMER_FILE);
@@ -259,6 +290,29 @@ void CustomerManager::save()
     }
 
     file.close();
+}
+void CustomerManager::showSimpleList() const
+{
+    cout << left;
+
+    cout << setw(10) << "ID"
+         << setw(30) << "Customer Name"
+         << endl;
+
+    Utils::line();
+
+    for (const Customer &customer : customers)
+    {
+        cout << setw(10)
+             << customer.getId()
+
+             << setw(30)
+             << customer.getFullName()
+
+             << endl;
+    }
+
+    Utils::line();
 }
 void CustomerManager::menu()
 {

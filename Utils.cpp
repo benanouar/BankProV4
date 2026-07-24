@@ -76,6 +76,44 @@ string Utils::currentDate()
 
     return buffer;
 }
+string Utils::chooseCurrency()
+{
+    int choice;
+
+    cout << "1. DZD\n";
+    cout << "2. USD\n";
+    cout << "3. EUR\n";
+    cout << "Choice: ";
+
+    cin >> choice;
+
+    switch (choice)
+    {
+        case 1: return "DZD";
+        case 2: return "USD";
+        case 3: return "EUR";
+        default: return "";
+    }
+}
+string Utils::chooseAccountType()
+{
+    int choice;
+
+    cout << "1. Current\n";
+    cout << "2. Saving\n";
+    cout << "3. Business\n";
+    cout << "Choice: ";
+
+    cin >> choice;
+
+    switch (choice)
+    {
+        case 1: return "Current";
+        case 2: return "Saving";
+        case 3: return "Busniess";
+        default: return "";
+    }
+}
 string Utils::currentTime()
 {
     time_t now = time(nullptr);
@@ -92,3 +130,5 @@ string Utils::currentTime()
     return buffer;
 }
 
+string chooseCurrency();
+string chooseAccountType();

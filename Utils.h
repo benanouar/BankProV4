@@ -26,6 +26,10 @@ public:
 
     static void warning(string text);
 
+    static string chooseCurrency();
+
+    static string chooseAccountType();
+
     static void line();
 };
 

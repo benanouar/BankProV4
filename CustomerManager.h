@@ -17,13 +17,15 @@ public:
     void addCustomer();
 
     void showCustomers();
-
+    bool exists(int id);
+    void showSimpleList() const;
+    Customer* findById(int id);
     void searchCustomer();
     void editCustomer();
     void deleteCustomer();
     void menu();
     void load();
-
+    string getCustomerName(int id);
     void save();
 };
 

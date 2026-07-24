@@ -10,8 +10,10 @@ using namespace std;
 
 const string ACCOUNT_FILE = "Data/accounts.txt";
 
-AccountManager::AccountManager()
+AccountManager::AccountManager(CustomerManager* customerManager)
 {
+    this->customerManager = customerManager;
+
     load();
 }
 void AccountManager::menu()
@@ -68,6 +70,18 @@ void AccountManager::menu()
 
     } while (choice != 6);
 }
+bool AccountManager::accountExists(int accountNumber) const
+{
+    for (const Account &account : accounts)
+    {
+        if (account.getAccountNumber() == accountNumber)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 void AccountManager::addAccount()
 {
     Account account;
@@ -84,23 +98,33 @@ void AccountManager::addAccount()
 
     cout << "Account Number : ";
     cin >> accountNumber;
+    if (accountExists(accountNumber))
+    {
+        Utils::error("Account number already exists.");
+        return;
+    }
+    UI::drawHeader("AVAILABLE CUSTOMERS");
 
+    customerManager->showSimpleList();
+
+    cout << endl;
     cout << "Customer ID    : ";
     cin >> customerId;
-
+    if (!customerManager->exists(customerId))
+    {
+        Utils::error("Customer not found.");
+        return;
+    }
     cin.ignore();
 
-    cout << "Account Type (Current/Savings/Business): ";
-    getline(cin, accountType);
-
-    cout << "Currency (USD/EUR/DZD): ";
-    getline(cin, currency);
-
+  
     cout << "Initial Balance: ";
     cin >> balance;
 
     account.setAccountNumber(accountNumber);
     account.setCustomerId(customerId);
+    accountType = Utils::chooseAccountType();
+    currency = Utils::chooseCurrency();
     account.setAccountType(accountType);
     account.setCurrency(currency);
     account.setBalance(balance);
@@ -136,7 +160,7 @@ void AccountManager::showAccounts()
     for (const Account &account : accounts)
     {
         cout << setw(12) << account.getAccountNumber()
-             << setw(12) << account.getCustomerId()
+             << setw(12) << customerManager->getCustomerName(account.getCustomerId())
              << setw(15) << account.getAccountType()
              << setw(10) << account.getCurrency()
              << setw(15) << fixed << setprecision(2) << account.getBalance()

@@ -8,7 +8,9 @@ public:
     void run();
 private:
     CustomerManager customerManager;
-    AccountManager accountManager;    
+
+    AccountManager
+    accountManager{&customerManager};
 };
 
 #endif

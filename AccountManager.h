@@ -1,6 +1,6 @@
 #ifndef ACCOUNTMANAGER_H
 #define ACCOUNTMANAGER_H
-
+#include "CustomerManager.h"
 #include <vector>
 #include "Account.h"
 
@@ -10,9 +10,9 @@ class AccountManager
 {
 private:
     vector<Account> accounts;
-
+    CustomerManager* customerManager;
 public:
-    AccountManager();
+    AccountManager(CustomerManager* customerManager);
 
     void menu();
 
@@ -28,7 +28,7 @@ public:
     void deposit();
 
     void withdraw();
-
+bool accountExists(int accountNumber) const;
     void transfer();
     void load();
 
