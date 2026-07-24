@@ -22,7 +22,11 @@ do
             customerManager.menu();
             Utils::pause();
             break;
-
+ 
+        case 2: 
+            accountManager.menu();
+            Utils::pause();
+            break;
         case 9:
             Utils::warning("Goodbye!");
             break;
