@@ -27,10 +27,7 @@ void AccountManager::menu()
         cout << "3. Search Account\n";
         cout << "4. Edit Account\n";
         cout << "5. Delete Account\n";
-        cout << "6. Deposit\n"; 
-        cout << "7. Withdraw\n";
-        cout << "8. Transfert\n";
-        cout << "9. Back\n\n";
+        cout << "6. Back\n\n";
 
         cout << "Choice: ";
         cin >> choice;
@@ -61,29 +58,15 @@ void AccountManager::menu()
                 deleteAccount();
                 Utils::pause();
                 break;
+        
             case 6:
-                deposit();
-                Utils::pause();
-                break;
-
-            case 7:
-                withdraw();
-                Utils::pause();
-                break;
-
-            case 8:
-                transfer();
-                Utils::pause();
-                break;
-
-            case 9:
             break;
             default:
                 Utils::error("Invalid choice.");
                 Utils::pause();
         }
 
-    } while (choice != 9);
+    } while (choice != 6);
 }
 void AccountManager::addAccount()
 {
@@ -166,19 +149,107 @@ void AccountManager::showAccounts()
 }
 void AccountManager::searchAccount()
 {
+    UI::drawHeader("SEARCH ACCOUNT");
 
+    int accountNumber;
+
+    cout << "Account Number: ";
+    cin >> accountNumber;
+
+    for (const Account &account : accounts)
+    {
+        if (account.getAccountNumber() == accountNumber)
+        {
+            account.show();
+            return;
+        }
+    }
+
+    Utils::warning("Account not found.");
 }
-
 void AccountManager::editAccount()
 {
+    UI::drawHeader("EDIT ACCOUNT");
 
+    int number;
+
+    cout << "Account Number: ";
+    cin >> number;
+
+    cin.ignore();
+
+    for (Account &account : accounts)
+    {
+        if (account.getAccountNumber() == number)
+        {
+            string text;
+            double balance;
+
+            cout << "Account Type (" << account.getAccountType() << "): ";
+            getline(cin, text);
+            if (!text.empty())
+                account.setAccountType(text);
+
+            cout << "Currency (" << account.getCurrency() << "): ";
+            getline(cin, text);
+            if (!text.empty())
+                account.setCurrency(text);
+
+            cout << "Balance (" << account.getBalance() << "): ";
+            cin >> balance;
+
+            account.setBalance(balance);
+
+            save();
+
+            Utils::success("Account updated successfully.");
+
+            return;
+        }
+    }
+
+    Utils::warning("Account not found.");
 }
-
 void AccountManager::deleteAccount()
 {
+    UI::drawHeader("DELETE ACCOUNT");
 
+    int accountNumber;
+
+    cout << "Account Number: ";
+    cin >> accountNumber;
+
+    for (auto it = accounts.begin(); it != accounts.end(); ++it)
+    {
+        if (it->getAccountNumber() == accountNumber)
+        {
+            char answer;
+
+            cout << "\nDelete Account "
+                 << accountNumber
+                 << " ? (Y/N): ";
+
+            cin >> answer;
+
+            if (answer == 'Y' || answer == 'y')
+            {
+                accounts.erase(it);
+
+                save();
+
+                Utils::success("Account deleted successfully.");
+            }
+            else
+            {
+                Utils::warning("Operation cancelled.");
+            }
+
+            return;
+        }
+    }
+
+    Utils::warning("Account not found.");
 }
-
 void AccountManager::load()
 {
     accounts.clear();
