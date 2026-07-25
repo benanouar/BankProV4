@@ -3,7 +3,7 @@
 #include "CustomerManager.h"
 #include <vector>
 #include "Account.h"
-
+#include "TransactionManager.h"
 using namespace std;
 
 class AccountManager
@@ -11,9 +11,13 @@ class AccountManager
 private:
     vector<Account> accounts;
     CustomerManager* customerManager;
+    TransactionManager* transactionManager;
 public:
-    AccountManager(CustomerManager* customerManager);
-
+    AccountManager(
+        CustomerManager* customerManager,
+        TransactionManager* transactionManager
+    );
+    Account* findAccount(int accountNumber);
     void menu();
 
     void addAccount();
@@ -26,9 +30,10 @@ public:
 
     void deleteAccount();
     void deposit();
-
+    void depositMenu();
     void withdraw();
 bool accountExists(int accountNumber) const;
+bool deposit(int accountNumber, double amount);
     void transfer();
     void load();
 

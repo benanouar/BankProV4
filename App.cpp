@@ -4,8 +4,13 @@
 #include <iostream>
 
 using namespace std;
-
+App::App()
+    :
+accountManager(&customerManager, &transactionManager)
+{
+}
 void App::run()
+
 {
 int choice;
 
@@ -26,6 +31,10 @@ do
         case 2: 
             accountManager.menu();
             Utils::pause();
+            break;
+        case 3:
+            transactionManager.menu();
+            Utils::pause();                        
             break;
         case 9:
             Utils::warning("Goodbye!");

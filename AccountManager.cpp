@@ -1,7 +1,7 @@
 #include "AccountManager.h"
 #include "UI.h"
+#include "Transaction.h"
 #include "Utils.h"
-
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -10,9 +10,13 @@ using namespace std;
 
 const string ACCOUNT_FILE = "Data/accounts.txt";
 
-AccountManager::AccountManager(CustomerManager* customerManager)
+AccountManager::AccountManager(
+    CustomerManager* customerManager,
+    TransactionManager* transactionManager
+)
 {
     this->customerManager = customerManager;
+    this->transactionManager = transactionManager;
 
     load();
 }
@@ -29,7 +33,8 @@ void AccountManager::menu()
         cout << "3. Search Account\n";
         cout << "4. Edit Account\n";
         cout << "5. Delete Account\n";
-        cout << "6. Back\n\n";
+        cout << "6. Deposit\n";
+        cout << "7. Back\n\n";
 
         cout << "Choice: ";
         cin >> choice;
@@ -60,15 +65,18 @@ void AccountManager::menu()
                 deleteAccount();
                 Utils::pause();
                 break;
-        
             case 6:
+                depositMenu();
+                Utils::pause();
+                break;
+            case 7:
             break;
             default:
                 Utils::error("Invalid choice.");
                 Utils::pause();
         }
 
-    } while (choice != 6);
+    } while (choice != 7);
 }
 bool AccountManager::accountExists(int accountNumber) const
 {
@@ -317,3 +325,75 @@ void AccountManager::save()
 
     file.close();
 }
+Account* AccountManager::findAccount(int accountNumber)
+{
+    for (Account &account : accounts)
+    {
+        if (account.getAccountNumber() == accountNumber)
+        {
+            return &account;
+        }
+    }
+
+    return nullptr;
+}
+bool AccountManager::deposit(int accountNumber, double amount)
+{
+    Account* account = findAccount(accountNumber);
+
+    if (account == nullptr)
+    {
+        return false;
+    }
+
+    account->setBalance(account->getBalance() + amount);
+
+    save();
+Transaction transaction;
+
+transaction.setId(transactionManager->getNextId());
+
+transaction.setAccountNumber(accountNumber);
+
+transaction.setType("Deposit");
+
+transaction.setAmount(amount);
+
+transaction.setBalanceAfter(account->getBalance());
+
+transaction.setDate(Utils::currentDate());
+transactionManager->addTransaction(transaction);
+    return true;
+}
+
+
+
+void AccountManager::depositMenu()
+{
+    int accountNumber;
+    double amount;
+
+    UI::drawHeader("DEPOSIT");
+
+    cout << "Account Number : ";
+    cin >> accountNumber;
+
+    cout << "Amount : ";
+    cin >> amount;
+
+    if (amount <= 0)
+    {
+        Utils::error("Invalid amount.");
+        return;
+    }
+
+    if (deposit(accountNumber, amount))
+    {
+        Utils::success("Deposit completed successfully.");
+    }
+    else
+    {
+        Utils::error("Account not found.");
+    }
+}
+

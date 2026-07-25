@@ -1,16 +1,25 @@
-#include "CustomerManager.h"
 #ifndef APP_H
 #define APP_H
+
+#include "CustomerManager.h"
+#include "TransactionManager.h"
 #include "AccountManager.h"
+
 class App
 {
-public:
-    void run();
 private:
+
     CustomerManager customerManager;
 
-    AccountManager
-    accountManager{&customerManager};
+    TransactionManager transactionManager;
+
+    AccountManager accountManager;
+
+public:
+
+    App();
+
+    void run();
 };
 
 #endif
