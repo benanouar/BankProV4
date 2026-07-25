@@ -34,7 +34,9 @@ void AccountManager::menu()
         cout << "4. Edit Account\n";
         cout << "5. Delete Account\n";
         cout << "6. Deposit\n";
-        cout << "7. Back\n\n";
+        cout << "7. Withdrawa\n";
+        cout << "8. Transfar\n";
+        cout << "9. Back\n\n";
 
         cout << "Choice: ";
         cin >> choice;
@@ -70,13 +72,21 @@ void AccountManager::menu()
                 Utils::pause();
                 break;
             case 7:
+                withdrawMenu();
+                Utils::pause(); 
+                break;
+            case 8:
+                transferMenu();
+                Utils::pause();
+                break;
+            case 9:
             break;
             default:
                 Utils::error("Invalid choice.");
                 Utils::pause();
         }
 
-    } while (choice != 7);
+    } while (choice != 9);
 }
 bool AccountManager::accountExists(int accountNumber) const
 {
@@ -89,6 +99,29 @@ bool AccountManager::accountExists(int accountNumber) const
     }
 
     return false;
+}
+void AccountManager::showSimpleAccounts() const
+{
+    cout << endl;
+
+    cout << left
+         << setw(12) << "Account"
+         << setw(25) << "Customer"
+         << setw(10) << "Currency"
+         << endl;
+
+    cout << string(50, '=') << endl;
+
+    for (const Account &account : accounts)
+    {
+        cout << left
+             << setw(12) << account.getAccountNumber()
+             << setw(25) << customerManager->getCustomerName(account.getCustomerId())
+             << setw(10) << account.getCurrency()
+             << endl;
+    }
+
+    cout << endl;
 }
 void AccountManager::addAccount()
 {
@@ -365,6 +398,58 @@ transaction.setDate(Utils::currentDate());
 transactionManager->addTransaction(transaction);
     return true;
 }
+bool AccountManager::withdraw(int accountNumber, double amount)
+{
+    Account* account = findAccount(accountNumber);
+
+    if (account == nullptr)
+        return false;
+
+    if (amount <= 0)
+        return false;
+
+    if (account->getBalance() < amount)
+        return false;
+
+    account->setBalance(account->getBalance() - amount);
+
+    save();
+
+    Transaction transaction;
+
+    transaction.setId(transactionManager->getNextId());
+    transaction.setAccountNumber(accountNumber);
+    transaction.setType("Withdraw");
+    transaction.setAmount(amount);
+    transaction.setBalanceAfter(account->getBalance());
+    transaction.setDate(Utils::currentDate());
+
+    transactionManager->addTransaction(transaction);
+
+    return true;
+}
+void AccountManager::withdrawMenu()
+{
+    int accountNumber;
+    double amount;
+
+    UI::drawHeader("WITHDRAW");
+
+    cout << "Account Number : ";
+    cin >> accountNumber;
+
+    cout << "Amount : ";
+    cin >> amount;
+
+    if (withdraw(accountNumber, amount))
+    {
+        Utils::success("Withdraw completed successfully.");
+    }
+    else
+    {
+        Utils::error("Withdraw failed.");
+    }
+}
 
 
 
@@ -395,5 +480,94 @@ void AccountManager::depositMenu()
     {
         Utils::error("Account not found.");
     }
+}
+bool AccountManager::transfer(int fromAccount, int toAccount, double amount)
+{
+    Account* sender = findAccount(fromAccount);
+    Account* receiver = findAccount(toAccount);
+
+    if (sender == nullptr)
+{
+    Utils::error("Source account not found.");
+    return false;
+}
+
+if (receiver == nullptr)
+{
+    Utils::error("Destination account not found.");
+    return false;
+}
+
+if (fromAccount == toAccount)
+{
+    Utils::error("Cannot transfer to the same account.");
+    return false;
+}
+if (amount <= 0)
+{
+    Utils::error("Invalid amount.");
+    return false;
+}
+if (sender->getBalance() < amount)
+{
+    Utils::error("Insufficient balance.");
+    return false;
+}
+if (sender->getCurrency() != receiver->getCurrency())
+{
+    Utils::error("Cannot transfer between different currencies.");
+    return false;
+}
+    sender->setBalance(sender->getBalance() - amount);
+    receiver->setBalance(receiver->getBalance() + amount);
+
+    save();
+
+    Transaction outTransaction;
+    outTransaction.setId(transactionManager->getNextId());
+    outTransaction.setAccountNumber(fromAccount);
+    outTransaction.setType("Transfer Out");
+    outTransaction.setAmount(amount);
+    outTransaction.setBalanceAfter(sender->getBalance());
+    outTransaction.setDate(Utils::currentDate());
+
+    transactionManager->addTransaction(outTransaction);
+
+    Transaction inTransaction;
+    inTransaction.setId(transactionManager->getNextId());
+    inTransaction.setAccountNumber(toAccount);
+    inTransaction.setType("Transfer In");
+    inTransaction.setAmount(amount);
+    inTransaction.setBalanceAfter(receiver->getBalance());
+    inTransaction.setDate(Utils::currentDate());
+
+    transactionManager->addTransaction(inTransaction);
+
+    return true;
+}
+void AccountManager::transferMenu()
+{
+    int fromAccount;
+    int toAccount;
+    double amount;
+
+    UI::drawHeader("TRANSFER");
+    UI::drawHeader("AVAILABLE ACCOUNTS");
+
+    showSimpleAccounts();
+    cout << "From Account : ";
+    cin >> fromAccount;
+
+    cout << "To Account : ";
+    cin >> toAccount;
+
+    cout << "Amount : ";
+    cin >> amount;
+
+    if (transfer(fromAccount, toAccount, amount))
+    {
+        Utils::success("Transfer completed successfully.");
+    }
+
 }
 

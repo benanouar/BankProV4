@@ -26,6 +26,7 @@ public:
     void addTransaction(const Transaction& transaction);
     void menu();
     void showTransactions();
+    void showAccountStatement(int accountNumber);
 
     int getNextId();
 };

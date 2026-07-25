@@ -27,13 +27,18 @@ public:
     void searchAccount();
 
     void editAccount();
-
+    void showSimpleAccounts() const;
     void deleteAccount();
     void deposit();
     void depositMenu();
     void withdraw();
 bool accountExists(int accountNumber) const;
 bool deposit(int accountNumber, double amount);
+bool withdraw(int accountNumber, double amount);
+bool transfer(int fromAccount, int toAccount, double amount);
+
+    void transferMenu();
+    void withdrawMenu();
     void transfer();
     void load();
 

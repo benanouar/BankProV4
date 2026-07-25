@@ -1,7 +1,7 @@
 #include "TransactionManager.h"
 #include "UI.h"
 #include "Utils.h"
-
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 
@@ -73,9 +73,43 @@ void TransactionManager::showTransactions()
         return;
     }
 
+    UI::drawHeader("TRANSACTIONS");
+
+    cout << left;
+
+    cout << setw(6)  << "ID"
+         << setw(12) << "Account"
+         << setw(18) << "Type"
+         << setw(15) << "Amount"
+         << setw(18) << "Balance"
+         << setw(15) << "Date"
+         << endl;
+
+    cout << string(84, '=') << endl;
+
     for (const Transaction &transaction : transactions)
     {
         transaction.show();
+    }
+}
+void TransactionManager::showAccountStatement(int accountNumber)
+{
+    UI::drawHeader("ACCOUNT STATEMENT");
+
+    bool found = false;
+
+    for (const Transaction &transaction : transactions)
+    {
+        if (transaction.getAccountNumber() == accountNumber)
+        {
+            transaction.show();
+            found = true;
+        }
+    }
+
+    if (!found)
+    {
+        Utils::warning("No transactions found for this account.");
     }
 }
 void TransactionManager::menu()
@@ -86,28 +120,45 @@ void TransactionManager::menu()
     {
         UI::drawHeader("TRANSACTION MANAGEMENT");
 
-        cout << "1. Show Transactions\n";
-        cout << "2. Search Transaction\n";
-        cout << "3. Filter By Account\n";
-        cout << "4. Back\n\n";
+cout << "1. Show Transactions\n";
+cout << "2. Account Statement\n";
+cout << "3. Search Transaction\n";
+cout << "4. Back\n\n";
 
-        cout << "Choice: ";
-        cin >> choice;
+cout << "Choice: ";
+cin >> choice;
 
-        switch (choice)
-        {
-            case 1:
-                showTransactions();
-                Utils::pause();
-                break;
+switch (choice)
+{
+    case 1:
+        showTransactions();
+        Utils::pause();
+        break;
 
-            case 4:
-                break;
+    case 2:
+    {
+        int accountNumber;
 
-            default:
-                Utils::warning("Coming soon...");
-                Utils::pause();
-        }
+        cout << "Account Number : ";
+        cin >> accountNumber;
 
-    } while (choice != 4);
+        showAccountStatement(accountNumber);
+
+        break;
+    }
+
+    case 3:
+        Utils::warning("Coming soon...");
+        Utils::pause();
+        break;
+
+    case 4:
+        break;
+
+    default:
+        Utils::error("Invalid choice.");
+        Utils::pause();
+      }    
+}   while (choice != 4);
+
 }

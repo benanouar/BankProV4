@@ -1,6 +1,6 @@
 #include "Transaction.h"
 #include "Utils.h"
-
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 
@@ -64,16 +64,16 @@ void Transaction::deserialize(string line)
 }
 void Transaction::show() const
 {
-    Utils::line();
+    cout << left;
 
-    cout << "Transaction ID : " << id << endl;
-    cout << "Account Number : " << accountNumber << endl;
-    cout << "Type           : " << type << endl;
-    cout << "Amount         : " << amount << endl;
-    cout << "Balance After  : " << balanceAfter << endl;
-    cout << "Date           : " << date << endl;
+    cout << setw(6)  << id;
+    cout << setw(12) << accountNumber;
+    cout << setw(18) << type;
+    cout << setw(15) << fixed << setprecision(2) << amount;
+    cout << setw(18) << fixed << setprecision(2) << balanceAfter;
+    cout << setw(15) << date;
 
-    Utils::line();
+    cout << endl;
 }
 int Transaction::getId() const
 {
