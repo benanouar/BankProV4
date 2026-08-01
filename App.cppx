@@ -69,6 +69,7 @@ do
             Utils::pause();   
 }    
 
-} while (choice != 9);
+     } while (choice != 9);
 }
+
 

@@ -199,6 +199,93 @@ void CardManager::searchCard()
 
     Utils::error("Card not found.");
 }
+void CardManager::blockCard()
+{
+    string cardNumber;
+
+    UI::drawHeader("BLOCK CARD");
+
+    cout << "Card Number : ";
+    cin >> cardNumber;
+
+    for (Card &card : cards)
+    {
+        if (card.getCardNumber() == cardNumber)
+        {
+            if (!card.isActive())
+            {
+                Utils::warning("Card is already blocked.");
+                return;
+            }
+
+            card.setActive(false);
+
+            save();
+
+            Utils::success("Card blocked successfully.");
+
+            return;
+        }
+    }
+
+    Utils::error("Card not found.");
+}
+void CardManager::unblockCard()
+{
+    string cardNumber;
+
+    UI::drawHeader("UNBLOCK CARD");
+
+    cout << "Card Number : ";
+    cin >> cardNumber;
+
+    for (Card &card : cards)
+    {
+        if (card.getCardNumber() == cardNumber)
+        {
+            if (card.isActive())
+            {
+                Utils::warning("Card is already active.");
+                return;
+            }
+
+            card.setActive(true);
+
+            save();
+
+            Utils::success("Card activated successfully.");
+
+            return;
+        }
+    }
+
+    Utils::error("Card not found.");
+}
+void CardManager::deleteCard()
+{
+    string cardNumber;
+
+    UI::drawHeader("DELETE CARD");
+
+    cout << "Card Number : ";
+    cin >> cardNumber;
+
+    for (auto it = cards.begin(); it != cards.end(); ++it)
+    {
+        if (it->getCardNumber() == cardNumber)
+        {
+            cards.erase(it);
+
+            save();
+
+            Utils::success("Card deleted successfully.");
+
+            return;
+        }
+    }
+
+    Utils::error("Card not found.");
+}
 void CardManager::menu()
 {
     int choice;
@@ -233,6 +320,20 @@ void CardManager::menu()
                 searchCard();
                 Utils::pause();
                 break;
+case 4:
+    blockCard();
+    Utils::pause();
+    break;
+
+case 5:
+    unblockCard();
+    Utils::pause();
+    break;
+
+case 6:
+    deleteCard();
+    Utils::pause();
+    break;
             case 7:
                 break;
 

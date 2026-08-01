@@ -49,4 +49,5 @@ void Dashboard::show()
     cout << "9. Exit\n";
 
     Utils::line();
+    
 }
