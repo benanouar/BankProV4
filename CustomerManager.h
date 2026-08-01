@@ -15,7 +15,7 @@ public:
     CustomerManager();
 
     void addCustomer();
-
+    int getCount() const;
     void showCustomers();
     bool exists(int id);
     void showSimpleList() const;

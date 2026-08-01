@@ -66,6 +66,10 @@ void CustomerManager::addCustomer()
 
     Utils::success("Customer added successfully.");
 }
+int CustomerManager::getCount() const
+{
+    return customers.size();
+}
 void CustomerManager::showCustomers()
 {
     UI::drawHeader("CUSTOMERS");

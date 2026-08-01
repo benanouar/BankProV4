@@ -27,7 +27,7 @@ public:
     void menu();
     void showTransactions();
     void showAccountStatement(int accountNumber);
-
+int getCount() const;
     int getNextId();
 };
 

@@ -40,6 +40,10 @@ void CardManager::load()
 
     file.close();
 }
+int CardManager::getCount() const
+{
+    return cards.size();
+}
 void CardManager::save()
 {
     ofstream file(fileName);

@@ -6,7 +6,12 @@
 using namespace std;
 App::App()
     : accountManager(&customerManager, &transactionManager),
-      cardManager(&accountManager)
+      cardManager(&accountManager),
+      reportManager(
+          &customerManager,
+          &accountManager,
+          &transactionManager,
+          &cardManager)
 {
 }
 void App::run()
@@ -46,10 +51,9 @@ do
             break;
 
         case 6:
-            Utils::warning("Reports module coming soon...");
+            reportManager.menu();
             Utils::pause();
             break;
-
         case 7:
             Utils::warning("Statistics module coming soon...");
             Utils::pause();

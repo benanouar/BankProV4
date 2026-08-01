@@ -41,7 +41,7 @@ bool transfer(int fromAccount, int toAccount, double amount);
     void withdrawMenu();
     void transfer();
     void load();
-
+int getCount() const;
     void save();
 };
 

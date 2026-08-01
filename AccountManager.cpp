@@ -7,7 +7,10 @@
 #include <iomanip>
 
 using namespace std;
-
+int AccountManager::getCount() const
+{
+    return accounts.size();
+}
 const string ACCOUNT_FILE = "Data/accounts.txt";
 
 AccountManager::AccountManager(

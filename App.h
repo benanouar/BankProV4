@@ -4,7 +4,7 @@
 #include "CustomerManager.h"
 #include "TransactionManager.h"
 #include "AccountManager.h"
-
+#include "ReportManager.h"
 class App
 {
 private:
@@ -15,6 +15,7 @@ private:
 
     AccountManager accountManager;
     CardManager cardManager;
+    ReportManager reportManager;
 public:
 
     App();

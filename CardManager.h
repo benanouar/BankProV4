@@ -30,7 +30,7 @@ public:
     void save();
 
     int getNextId();
-
+    int getCount() const;
     void addCard();
 
     void showCards();

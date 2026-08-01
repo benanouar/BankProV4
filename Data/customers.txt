@@ -1,2 +1,3 @@
 1|Anouar |Benida |Male |22/03/1996|0775632544|benidaanouar@gmail.com|oran|206181326|24/07/2026|1
 2|imen|benida|female|6/8/2000|0667599992|benidaimen@gmail.com|oran|206789098|24/07/2026|1
+2|kamal|bousmaha|male|22/03/1996|0773662991|bsjjisbjwkj|bsjjak|093761733|01/08/2026|1

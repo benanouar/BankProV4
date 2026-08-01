@@ -13,6 +13,10 @@ TransactionManager::TransactionManager()
 
     load();
 }
+int TransactionManager::getCount() const
+{
+    return transactions.size();
+}
 void TransactionManager::load()
 {
     transactions.clear();
