@@ -21,7 +21,13 @@ int choice;
 
 do
 {
-    Dashboard::show();
+    Dashboard::show(
+        customerManager.getCount(),
+        accountManager.getCount(),
+        transactionManager.getCount(),
+        cardManager.getCount(),
+        0
+    );
 
     cout << "Choice: ";
     cin >> choice;

@@ -4,7 +4,12 @@
 class Dashboard
 {
 public:
-    static void show();
+    static void show(
+        int customers,
+        int accounts,
+        int transactions,
+        int cards,
+        int loans
+    );
 };
-
 #endif

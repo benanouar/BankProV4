@@ -5,7 +5,13 @@
 
 using namespace std;
 
-void Dashboard::show()
+void Dashboard::show(
+    int customers,
+    int accounts,
+    int transactions,
+    int cards,
+    int loans
+)
 {
     Utils::clearScreen();
 
@@ -30,12 +36,11 @@ void Dashboard::show()
 
     Utils::line();
 
-    cout << "Customers     : 0\n";
-    cout << "Accounts      : 0\n";
-    cout << "Transactions  : 0\n";
-    cout << "Loans         : 0\n";
-    cout << "Cards         : 0\n";
-
+    cout << "Customers     : " << customers << endl;
+    cout << "Accounts      : " << accounts << endl;
+    cout << "Transactions  : " << transactions << endl;
+    cout << "Loans         : " << loans << endl;
+    cout << "Cards         : " << cards << endl;
     Utils::line();
 
     cout << "1. Customers\n";
